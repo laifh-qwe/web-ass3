@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Catalogue</title>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      fetch('t1 book.xml')
+        .then(response => response.text())
+        .then(xmlText => {
+          const parser = new DOMParser();
+          const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+          const books = xmlDoc.querySelectorAll('book');
+          const catalogue = document.getElementById('catalogue');
+          
+          books.forEach(book => {
+            const title = book.querySelector('title').textContent;
+            const author = book.querySelector('author').textContent;
+            const price = book.querySelector('price').textContent;
+            
+            const bookEntry = document.createElement('div');
+            bookEntry.innerHTML = `<h2>${title}</h2><p>Author:${author}</p><p>Price: $${price}</p>`;
+            catalogue.appendChild(bookEntry);
+          });
+        })
+        .catch(error => console.error('Fetch error: ', error));
+    });
+  </script>
+</head>
+<body>
+  <h1>Book Catalogue</h1>
+  <div id="catalogue"></div>
+</body>
+</html>
